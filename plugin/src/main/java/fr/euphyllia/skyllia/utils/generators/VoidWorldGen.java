@@ -9,15 +9,19 @@ import java.util.Random;
 
 public class VoidWorldGen extends ChunkGenerator {
 
-    public byte[][] blockSections;
-
     @Override
     public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         int xMin = 0;
         int xMax = 16;
         int zMin = 0;
         int zMax = 16;
-        fillChunk(chunkData, xMin, xMax, zMin, zMax, Material.AIR);
+        Material blockMaterial = switch (worldInfo.getEnvironment()) {
+            case NORMAL -> Material.STONE;
+            case NETHER -> Material.NETHERRACK;
+            case THE_END -> Material.END_STONE;
+            default -> Material.AIR;
+        };
+        fillChunk(chunkData, xMin, xMax, zMin, zMax, blockMaterial);
     }
 
     private void fillChunk(ChunkData chunkData, int minX, int maxX, int minZ, int maxZ, Material material) {

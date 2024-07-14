@@ -61,7 +61,6 @@ public class WorldEditUtils {
                             .createPaste(editSession)
                             .to(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))
                             .copyEntities(true) // Si la schem a des entités
-                            .ignoreAirBlocks(true) // On ne colle pas les blocks d'air de la schematic, gain de performance accru
                             .build();
                     cachedIslandSchematic.putIfAbsent(file, format);
                     Operations.complete(operation);

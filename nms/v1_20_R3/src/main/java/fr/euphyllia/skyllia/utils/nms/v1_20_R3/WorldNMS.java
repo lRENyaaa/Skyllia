@@ -24,6 +24,8 @@ import net.minecraft.world.entity.npc.CatSpawner;
 import net.minecraft.world.entity.npc.WanderingTraderSpawner;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.PatrolSpawner;
 import net.minecraft.world.level.levelgen.PhantomSpawner;
@@ -241,9 +243,15 @@ public class WorldNMS extends fr.euphyllia.skyllia.api.utils.nms.WorldNMS {
             if (entity instanceof Player) continue;
             entity.remove();
         }
+        BlockState state = switch (craftWorld.getEnvironment()) {
+            case NORMAL -> Blocks.STONE.defaultBlockState();
+            case NETHER -> Blocks.NETHERRACK.defaultBlockState();
+            case THE_END -> Blocks.END_STONE.defaultBlockState();
+            default -> Blocks.AIR.defaultBlockState();
+        };
         for (final BlockPos blockPos : blockPosIterable) {
             levelChunk.removeBlockEntity(blockPos);
-            serverLevel.setBlock(blockPos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 16);
+            serverLevel.setBlock(blockPos, state, 16);
         }
         for (final BlockPos blockPos : blockPosIterable) { // Fix memory issue client
             serverChunkCache.blockChanged(blockPos);
